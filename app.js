@@ -3,6 +3,20 @@ const app = document.getElementById("app");
 let score = localStorage.getItem("mk_score")
   ? parseInt(localStorage.getItem("mk_score"))
   : 0;
+  
+let maxRange = localStorage.getItem("mk_range")
+  ? parseInt(localStorage.getItem("mk_range"))
+  : 3;
+
+let unlockedRange = localStorage.getItem("mk_unlocked")
+  ? parseInt(localStorage.getItem("mk_unlocked"))
+  : 3;
+
+function saveRange() {
+  localStorage.setItem("mk_range", maxRange);
+  localStorage.setItem("mk_unlocked", unlockedRange);
+}
+
 
 function saveScore() {
   localStorage.setItem("mk_score", score);
@@ -112,8 +126,9 @@ function nextQuestion() {
 
   currentQuestion++;
 
-  const a = Math.floor(Math.random() * 9) + 1;
-  const b = Math.floor(Math.random() * 9) + 1;
+	const a = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * maxRange) + 1;
+
 
   app.innerHTML = `
     <div class="title">🧠 Practicar</div>
@@ -171,18 +186,32 @@ function nextQuestion() {
 }
 
 function checkAnswer(a, b) {
-  const value = parseInt(document.getElementById("answer").value);
+
+  const input = document.getElementById("answer");
+  if (!input) return;
+
+  const value = parseInt(input.value);
+
+  if (isNaN(value)) return;
 
   if (value === a * b) {
+
     correctCount++;
     score += 10;
     saveScore();
-    nextQuestion();
+
+    setTimeout(() => {
+      nextQuestion();
+    }, 200);
+
   } else {
+
     wrongCount++;
     showFriendlyError(a * b);
   }
 }
+
+
 
 function showFriendlyError(correctAnswer) {
   const modal = document.createElement("div");
@@ -311,7 +340,7 @@ function generateReviewImproved() {
   const container = document.getElementById("reviewContent");
   container.innerHTML = "";
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 10; i++) {
 
     const card = document.createElement("div");
     card.className = "review-card";
@@ -355,9 +384,48 @@ function generateReviewImproved() {
    JUEGOS
 =========================== */
 
+function renderRangeSelector() {
+  return `
+    <div class="selection-group">
+      <div class="selection-title">Rango de dificultad</div>
+      <div class="selection-buttons">
+        ${[...Array(10)].map((_, i) => {
+          const num = i + 1;
+          const locked = num > unlockedRange;
+          return `
+            <button 
+              class="select-btn ${num===maxRange?'active':''}" 
+              ${locked?'disabled':''}
+              onclick="setRange(${num})">
+              ${locked ? '🔒' : num}
+            </button>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function setRange(num) {
+  if (num <= unlockedRange) {
+    maxRange = num;
+    saveRange();
+    showGames();
+  }
+}
+
+function unlockNextRange() {
+  if (unlockedRange < 10) {
+    unlockedRange++;
+    saveRange();
+  }
+}
+
 function showGames() {
   app.innerHTML = `
     <div class="title">🎮 Juegos Rápidos</div>
+
+    ${renderRangeSelector()}
 
     <button class="menu-btn" onclick="startShootGame()">
       🎯 Dispara el Resultado
@@ -378,6 +446,7 @@ function showGames() {
     <button class="menu-btn" onclick="showMenu()">⬅ Volver</button>
   `;
 }
+
 
 /* ===========================
    PROGRESO
@@ -409,8 +478,9 @@ let shootWrong = 0;
 
 function startShootGame() {
 
-  const a = Math.floor(Math.random() * 9) + 1;
-  const b = Math.floor(Math.random() * 9) + 1;
+	const a = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * maxRange) + 1;
+
   const correctAnswer = a * b;
 
   let options = [correctAnswer];
@@ -459,7 +529,7 @@ function checkShoot(button, value, correctAnswer) {
 
 	if (value === correctAnswer) {
 
-	  shootCorrect++;
+	  if (shootCorrect % 5 === 0) unlockNextRange();
 
 	  button.style.backgroundColor = "#4CAF50";
 
@@ -499,8 +569,9 @@ function startRaceGame() {
 
   function renderQuestion() {
 
-    const a = Math.floor(Math.random() * 9) + 1;
-    const b = Math.floor(Math.random() * 9) + 1;
+	const a = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * maxRange) + 1;
+
     const result = a * b;
 
     document.getElementById("app").innerHTML = `
@@ -625,8 +696,9 @@ function start60sMode() {
 }
 
 function next60() {
-  const a = Math.floor(Math.random() * 9) + 1;
-  const b = Math.floor(Math.random() * 9) + 1;
+	const a = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * maxRange) + 1;
+
 
   app.innerHTML = `
     <div id="timer">⏳ ${timeLeft}s</div>
@@ -660,8 +732,9 @@ function startMemoryGame() {
   const pairs = [];
 
   for (let i = 0; i < 4; i++) {
-    const a = Math.floor(Math.random() * 9) + 1;
-    const b = Math.floor(Math.random() * 9) + 1;
+	const a = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * maxRange) + 1;
+
 
     pairs.push({ text: `${a}×${b}`, value: a * b });
     pairs.push({ text: `${a * b}`, value: a * b });
