@@ -76,7 +76,7 @@ function showModal(message, correctAnswer = null) {
 
 function showMenu() {
   app.innerHTML = `
-    <div class="title">🎉 MultiplicaKids 🎉</div>
+    <div class="title">🎉 MultiplicaKids v2 🎉</div>
 
     <div class="menu-grid">
       <button class="menu-btn" onclick="startPractice()">
