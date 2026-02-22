@@ -119,70 +119,113 @@ function startPractice() {
 }
 
 function nextQuestion() {
+
   if (currentQuestion >= totalQuestions) {
     showPracticeResults();
     return;
   }
 
   currentQuestion++;
+  currentInput = "";
 
-	const a = Math.floor(Math.random() * maxRange) + 1;
-	const b = Math.floor(Math.random() * 10) + 1;      // siempre hasta 10
-
+  const a = Math.floor(Math.random() * maxRange) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
 
   app.innerHTML = `
     <div class="title">🧠 Practicar</div>
 
-    <div style="margin:20px;font-size:1.2rem;">
-      Pregunta ${currentQuestion} de ${totalQuestions}
-    </div>
+    <div class="practice-container">
 
-    <div style="margin:10px;">
-      <div style="background:#ddd;border-radius:20px;height:20px;">
-        <div style="
-          background:linear-gradient(90deg,#4ade80,#22c55e);
-          width:${(currentQuestion-1)/totalQuestions*100}%;
-          height:100%;
-          border-radius:20px;">
-        </div>
+      <div class="practice-question">
+        ${a} × ${b} = 
+        <span id="displayAnswer" class="answer-inline"></span>
       </div>
+
+      <div class="practice-content">
+
+        <div class="spacer-left"></div>
+
+        <div class="practice-right">
+
+          <div class="num-pad">
+            ${generateNumberPad(a, b)}
+          </div>
+
+          <div class="score-side">
+            <span class="score-correct">✅ ${correctCount}</span>
+            <span class="score-wrong">❌ ${wrongCount}</span>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
-    <div style="margin:20px;font-size:2.5rem;font-weight:bold;">
-      ${a} × ${b} = ?
-    </div>
-
-    <input 
-      type="number" 
-      id="answer" 
-      style="
-        font-size:2rem;
-        padding:15px;
-        border-radius:15px;
-        border:3px solid #4f46e5;
-        width:150px;
-        text-align:center;
-      "
-      autofocus
-    />
-
-    <br><br>
-
-    <button class="menu-btn" 
-      style="background:#4f46e5;color:white;"
-      onclick="checkAnswer(${a},${b})">
-      Responder
-    </button>
-
-    <div style="margin-top:30px;font-size:1.2rem;">
-      ✅ Aciertos: <strong style="color:#16a34a">${correctCount}</strong>
-      &nbsp;&nbsp;&nbsp;
-      ❌ Errores: <strong style="color:#dc2626">${wrongCount}</strong>
-    </div>
-
-    <br>
     <button class="menu-btn" onclick="showMenu()">⬅ Salir</button>
   `;
+}
+
+let currentInput = "";
+
+function generateNumberPad(a, b) {
+
+  const buttons = [
+    1,2,3,
+    4,5,6,
+    7,8,9,
+    "C",0,"OK"
+  ];
+
+  return buttons.map(val => `
+    <button 
+      class="pad-btn"
+      onclick="handlePadClick('${val}', ${a}, ${b})">
+      ${val}
+    </button>
+  `).join("");
+}
+
+function handlePadClick(value, a, b) {
+
+  const display = document.getElementById("displayAnswer");
+
+  if (value === "C") {
+    currentInput = "";
+  } 
+  else if (value === "OK") {
+    checkPadAnswer(a, b);
+    return;
+  } 
+  else {
+    if (currentInput.length < 3) {
+      currentInput += value;
+    }
+  }
+
+  display.textContent = currentInput;
+}
+
+function checkPadAnswer(a, b) {
+
+  if (parseInt(currentInput) === a * b) {
+
+    correctCount++;
+    score += 10;
+    saveScore();
+
+    currentInput = "";
+
+    setTimeout(() => {
+      nextQuestion();
+    }, 300);
+
+  } else {
+
+    wrongCount++;
+    showFriendlyError(a * b);
+    currentInput = "";
+  }
 }
 
 function checkAnswer(a, b) {
