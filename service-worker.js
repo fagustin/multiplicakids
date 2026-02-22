@@ -1,4 +1,4 @@
-const CACHE_NAME = "multiplicakids-v3"; // 🔥 Cambia versión en cada release
+const CACHE_NAME = "multiplicakids-v4"; // 🔥 Cambia versión en cada release
 
 const urlsToCache = [
   "/",
@@ -63,3 +63,4 @@ self.addEventListener("message", event => {
     self.skipWaiting();
   }
 });
+
