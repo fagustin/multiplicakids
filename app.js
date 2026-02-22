@@ -342,41 +342,67 @@ function generateReviewImproved() {
 
   for (let i = 1; i <= 10; i++) {
 
-    const card = document.createElement("div");
-    card.className = "review-card";
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.alignItems = "center";
+    row.style.justifyContent = "space-between";
+    row.style.background = "white";
+    row.style.padding = "15px 20px";
+    row.style.margin = "10px 0";
+    row.style.borderRadius = "15px";
+    row.style.boxShadow = "0 5px 15px rgba(0,0,0,0.1)";
 
+    // 🔢 Operación
     const equation = document.createElement("div");
-    equation.className = "review-equation";
-    equation.textContent = `${selectedTable} × ${i} = ${selectedTable * i}`;
+    equation.style.fontSize = "1.5rem";
+    equation.style.fontWeight = "bold";
+    equation.style.minWidth = "140px";
+    equation.innerHTML = `
+      ${selectedTable} × ${i} = 
+      <span style="color:#4f46e5">${selectedTable * i}</span>
+    `;
 
-    const grid = document.createElement("div");
-    grid.className = "visual-grid";
+    // 🎨 Refuerzo visual horizontal
+    const visual = document.createElement("div");
+    visual.style.display = "flex";
+    visual.style.flexWrap = "wrap";
+    visual.style.gap = "5px";
+    visual.style.flex = "1";
+    visual.style.justifyContent = "flex-start";
+    visual.style.marginLeft = "20px";
 
     if (selectedMode === "matrix") {
-      grid.style.gridTemplateColumns = `repeat(${i}, 40px)`;
 
+      // matriz horizontal por filas
       for (let r = 0; r < selectedTable; r++) {
+        const rowGroup = document.createElement("div");
+        rowGroup.style.display = "flex";
+        rowGroup.style.marginRight = "10px";
+
         for (let c = 0; c < i; c++) {
           const item = document.createElement("div");
           item.textContent = "🟦";
-          item.style.fontSize = "24px";
-          grid.appendChild(item);
+          item.style.fontSize = "20px";
+          rowGroup.appendChild(item);
         }
+
+        visual.appendChild(rowGroup);
       }
+
     } else {
-      grid.style.gridTemplateColumns = `repeat(${selectedTable}, 40px)`;
 
       for (let n = 0; n < selectedTable * i; n++) {
         const item = document.createElement("div");
         item.textContent = "⭐";
-        item.style.fontSize = "24px";
-        grid.appendChild(item);
+        item.style.fontSize = "20px";
+        visual.appendChild(item);
       }
+
     }
 
-    card.appendChild(equation);
-    card.appendChild(grid);
-    container.appendChild(card);
+    row.appendChild(equation);
+    row.appendChild(visual);
+    container.appendChild(row);
   }
 }
 
