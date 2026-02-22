@@ -127,7 +127,7 @@ function nextQuestion() {
   currentQuestion++;
 
 	const a = Math.floor(Math.random() * maxRange) + 1;
-	const b = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * 10) + 1;      // siempre hasta 10
 
 
   app.innerHTML = `
@@ -479,7 +479,7 @@ let shootWrong = 0;
 function startShootGame() {
 
 	const a = Math.floor(Math.random() * maxRange) + 1;
-	const b = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * 10) + 1;      // siempre hasta 10
 
   const correctAnswer = a * b;
 
@@ -527,35 +527,37 @@ function checkShoot(button, value, correctAnswer) {
 
   const feedback = document.getElementById("shootFeedback");
 
-	if (value === correctAnswer) {
+  if (value === correctAnswer) {
 
-	  if (shootCorrect % 5 === 0) unlockNextRange();
+    shootCorrect++; // 🔥 ESTA LÍNEA FALTABA
 
-	  button.style.backgroundColor = "#4CAF50";
+    if (shootCorrect % 5 === 0) unlockNextRange();
 
-	  feedback.innerHTML = `
-		<div class="feedback-success">
-		  🎉 ¡SÚPER BIEN!
-		</div>
-	  `;
+    button.style.backgroundColor = "#4CAF50";
 
-	  setTimeout(() => {
-		startShootGame();
-	  }, 1200);
+    feedback.innerHTML = `
+      <div class="feedback-success">
+        🎉 ¡SÚPER BIEN!
+      </div>
+    `;
 
-	} else {
+    setTimeout(() => {
+      startShootGame();
+    }, 1200);
 
-	  shootWrong++;
+  } else {
 
-	  button.style.backgroundColor = "#ff4d4d";
-	  button.disabled = true;
+    shootWrong++; // esta sí la tenías 👍
 
-	  feedback.innerHTML = `
-		<div class="feedback-error">
-		  😅 ¡Ups! Intenta otra vez
-		</div>
-	  `;
-	}
+    button.style.backgroundColor = "#ff4d4d";
+    button.disabled = true;
+
+    feedback.innerHTML = `
+      <div class="feedback-error">
+        😅 ¡Ups! Intenta otra vez
+      </div>
+    `;
+  }
 }
 
 let raceScore = 0;
@@ -570,7 +572,7 @@ function startRaceGame() {
   function renderQuestion() {
 
 	const a = Math.floor(Math.random() * maxRange) + 1;
-	const b = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * 10) + 1;      // siempre hasta 10
 
     const result = a * b;
 
@@ -697,7 +699,7 @@ function start60sMode() {
 
 function next60() {
 	const a = Math.floor(Math.random() * maxRange) + 1;
-	const b = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * 10) + 1;      // siempre hasta 10
 
 
   app.innerHTML = `
@@ -733,7 +735,7 @@ function startMemoryGame() {
 
   for (let i = 0; i < 4; i++) {
 	const a = Math.floor(Math.random() * maxRange) + 1;
-	const b = Math.floor(Math.random() * maxRange) + 1;
+	const b = Math.floor(Math.random() * 10) + 1;      // siempre hasta 10
 
 
     pairs.push({ text: `${a}×${b}`, value: a * b });
