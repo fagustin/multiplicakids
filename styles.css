@@ -370,3 +370,109 @@ body {
   transform: scale(1.05);
   background: #d5d5d5;
 }
+
+.num-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pad-btn {
+  font-size: 1.8rem;
+  padding: 20px;
+  border-radius: 15px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.pad-btn:active {
+  transform: scale(0.95);
+  background: #4338ca;
+}
+/* Contenedor general */
+.practice-container {
+  margin-top: 30px;
+}
+
+/* Operación centrada */
+.practice-question {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+/* Resultado inline */
+.answer-inline {
+  display: inline-block;
+  min-width: 80px;
+  border-bottom: 4px solid #4f46e5;
+  margin-left: 15px;
+  text-align: center;
+}
+
+/* Layout principal */
+.practice-content {
+  justify-content: flex-end;
+  padding-right: 80px;
+}
+
+/* Espacio izquierdo vacío */
+.spacer-left {
+  flex: 1;
+}
+
+/* Lado derecho */
+.practice-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Teclado */
+.num-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 90px);
+  gap: 15px;
+}
+
+.pad-btn {
+  font-size: 2rem;
+  padding: 20px;
+  border-radius: 18px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+
+.pad-btn:active {
+  transform: scale(0.95);
+  background: #4338ca;
+}
+
+/* Score debajo del teclado */
+.score-side {
+  margin-top: 25px;
+  font-size: 1.5rem;
+  display: flex;
+  gap: 30px;
+}
+
+.score-correct {
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.score-wrong {
+  color: #dc2626;
+  font-weight: bold;
+}
